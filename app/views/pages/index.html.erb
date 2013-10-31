@@ -7,6 +7,7 @@ var all_restaurants = <%= get_restaurants %>;
 var all_thingstodo = <%= get_thingstodo %>;
 
 var map;
+
 function initialize_gmaps() {
 
   // initialize new google maps LatLng object
@@ -33,7 +34,8 @@ function initialize_gmaps() {
 
   // Add the marker to the map by calling setMap()
   marker.setMap(map);
-}
+};
+
 
 function writeVisitToServer(place_id, current_day, type_of_place, visit_order) {
   var post_data = {
@@ -41,29 +43,52 @@ function writeVisitToServer(place_id, current_day, type_of_place, visit_order) {
     day_number: current_day,
     place_type: type_of_place,
     visit_order: visit_order
-  };
- 
+    };
+
   // this callback function will be called if the request succeeds.
   // the response is passed into this callback function as responseData
- 
+
   var post_callback = function (responseData) {
     // responseData.visit_id will be the id of database Visit object
+      $.ajax({
+          success: function(response) {
+            callback(filtered_response);
+          }
+
+      });
   };
- 
+
   // jQuery Ajax call
   $.post( "/visits", post_data, post_callback);
-}
+};
 
 
 $(document).ready(function() {
 
   initialize_gmaps();
 
+
+        // button that make buttons
+    $('#add_day_button').on('click', function () {
+
+
+      $('.day-plan li').remove();
+
+      var trip_counter = $("#button_adder").children().length;
+      $('#button_adder').append('<button id="day_' + trip_counter + '_button" type="button" class="trips btn btn-primary">Day ' + trip_counter + '</button>');
+    });
+
+
+
+
   $('#hotel_add').on('click', function() {
     var selectedHotelId = $('#hotels option:selected').attr('value');
     var selectedHotel = all_hotels[selectedHotelId];
     $('.day-plan > #hotel').replaceWith('<li>'+selectedHotel["name"]+'</li>');
-    writeVisitToServe(selectedHotel, )
+
+    // writeVisitToServe(selectedHotel, )
+
+
 
     var myLatLng = new google.maps.LatLng(parseFloat(selectedHotel["lat"]), parseFloat(selectedHotel["lon"]));
     var marker = new google.maps.Marker({
