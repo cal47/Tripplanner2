@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  place_id: 1
+  num_stars: 1
+  amenities: MyText
+
+two:
+  place_id: 1
+  num_stars: 1
+  amenities: MyText

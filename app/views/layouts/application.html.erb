@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Tripplanner</title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+
+  <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=AIzaSyC2ck8yFy7yYRff1B0DTQAM9Cpu_ao8lSA&sensor=true" %>
+
+
+ <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+</head>
+
+
+        <!-- nav bar -->
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Tripplanner</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+</div>
+
+    <!-- /.container -->
+
+
+<div class="container">
+
+    <div class="row">
+      <div class="col-md-3">
+
+        </div>
+
+          <div class="col-md-3">
+              <h3>Hotels</h3>
+                <select id="hotels">
+                <% Hotel.get_all.each_with_index do |h, id| %>
+                <%= "<option value='#{id}'>#{h[:name]}</option>".html_safe %>
+                <% end %>
+                </select>
+              <button id="hotel_add" type="button" class="btn btn-primary">Add</button>
+          </div>
+
+          <div class="col-md-3">
+              <h3>Things To Do</h3>
+              <select id="thing_to_dos">
+                <% ThingToDo.get_all.each_with_index do |t, id| %>
+                  <%= "<option value='#{id}'>#{t[:name]}</option>".html_safe %>
+                <% end %>
+              </select>
+              <button id="things_add" type="button" class="btn btn-primary">Add</button>
+          </div>
+
+          <div class="col-md-3">
+              <h3>Restaurants</h3>
+              <select id="restaurants">
+                <% Restaurant.get_all.each_with_index do |r, id| %>
+                <%= "<option value='#{id}'>#{r[:name]}</option>".html_safe %>
+                <% end %>
+              </select>
+              <button id="rest_add" type="button" class="btn btn-primary">Add</button>
+          </div>
+    </div>
+</div>
+
+
+
+<div class="container">
+
+        <%= yield %>
+
+</div>
+
+
+</body>
+</html>

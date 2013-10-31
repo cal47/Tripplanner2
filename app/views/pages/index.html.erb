@@ -1,0 +1,137 @@
+
+<br><br>
+<script>
+
+var all_hotels = <%= get_hotels %>;
+var all_restaurants = <%= get_restaurants %>;
+var all_thingstodo = <%= get_thingstodo %>;
+
+var map;
+function initialize_gmaps() {
+
+  // initialize new google maps LatLng object
+  var myLatlng = new google.maps.LatLng(40.705786,-74.007672);
+
+  // set the map options hash
+  var mapOptions = {
+    center: myLatlng,
+    zoom: 16,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+  // get the maps div's HTML obj
+  var map_canvas_obj = document.getElementById("map-canvas");
+
+  // initialize a new Google Map with the options
+  map = new google.maps.Map(map_canvas_obj, mapOptions);
+
+  // Add the marker to the map
+  var marker = new google.maps.Marker({
+    position: myLatlng,
+    title:"Hello World!"
+  });
+
+  // Add the marker to the map by calling setMap()
+  marker.setMap(map);
+}
+
+function writeVisitToServer(place_id, current_day, type_of_place, visit_order) {
+  var post_data = {
+    place_id: place_id,
+    day_number: current_day,
+    place_type: type_of_place,
+    visit_order: visit_order
+  };
+ 
+  // this callback function will be called if the request succeeds.
+  // the response is passed into this callback function as responseData
+ 
+  var post_callback = function (responseData) {
+    // responseData.visit_id will be the id of database Visit object
+  };
+ 
+  // jQuery Ajax call
+  $.post( "/visits", post_data, post_callback);
+}
+
+
+$(document).ready(function() {
+
+  initialize_gmaps();
+
+  $('#hotel_add').on('click', function() {
+    var selectedHotelId = $('#hotels option:selected').attr('value');
+    var selectedHotel = all_hotels[selectedHotelId];
+    $('.day-plan > #hotel').replaceWith('<li>'+selectedHotel["name"]+'</li>');
+    writeVisitToServe(selectedHotel, )
+
+    var myLatLng = new google.maps.LatLng(parseFloat(selectedHotel["lat"]), parseFloat(selectedHotel["lon"]));
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      title: selectedHotel["name"]
+    });
+  marker.setMap(map);
+
+  });
+
+
+  $('#things_add').on('click', function() {
+    var selectedThingId = $('#thing_to_dos option:selected').attr('value');
+    var selectedThing = all_thingstodo[selectedThingId];
+    $('.day-plan > #things').append('<li>'+selectedThing["name"]+'</li>');
+
+    var myLatLng = new google.maps.LatLng(parseFloat(selectedThing["lat"]), parseFloat(selectedThing["lon"]));
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      title: selectedThing["name"]
+    });
+  marker.setMap(map);
+  });
+
+
+
+  $('#rest_add').on('click', function() {
+    var selectedRestaurantId = $('#restaurants option:selected').attr('value');
+    var selectedRestaurant = all_restaurants[selectedRestaurantId];
+
+    $('.day-plan > #restaurant').append('<li>'+selectedRestaurant["name"]+'</li>');
+
+    var myLatLng = new google.maps.LatLng(parseFloat(selectedRestaurant["lat"]), parseFloat(selectedRestaurant["lon"]));
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      title: selectedRestaurant["name"]
+    });
+  marker.setMap(map);
+  });
+
+
+});
+
+</script>
+
+
+
+
+
+
+  <div class="row">
+          <div class="col-md-4 day-plan">
+            <h2>Plan for Day 1</h2>
+
+            <ul id="hotel">
+              <h4>Hotel</h4>
+            </ul>
+
+             <ul id="restaurant">
+              <h4>Restaurants</h4>
+            </ul>
+
+             <ul id="things">
+              <h4>Things to Do</h4>
+            </ul>
+          </div>
+
+
+ <!-- this is the google map   -->
+      <div id="map-canvas"/>
+      </div>
